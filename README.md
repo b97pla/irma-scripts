@@ -21,3 +21,5 @@ the corresponding project folder under ANALYSIS
 for samples present in a supplied vcf file
 * __statdump_to_json.pl__ - perl script that can parse a statdump zipfile created by sisyphus and output the statistics
 as json
+* __run_FastQC_and_MultiQC.sh__ - bash script to run FastQC on a specified project in a runfolder. 
+The script will summarize the output in one or several MultiQC-reports.
