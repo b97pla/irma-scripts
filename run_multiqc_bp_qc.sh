@@ -2,7 +2,9 @@
 
 #
 # A simple wrapper for the multiqc command in INS-22349
-# Usage: bash /proj/ngi2016001/private/scripts/run_multiqc_bp_qc.sh /proj/ngi2016001/nobackup/NGI/ANALYSIS/<project>
+# Usage:
+#  - Locally: bash /proj/ngi2016001/private/scripts/run_multiqc_bp_qc.sh /proj/ngi2016001/nobackup/NGI/ANALYSIS/<project>
+#  - Submitted to compute node (RECOMMENDED): sbatch /proj/ngi2016001/private/scripts/run_multiqc_bp_qc.sh /proj/ngi2016001/nobackup/NGI/ANALYSIS/<project>
 #
 #SBATCH -A ngi2016001
 #SBATCH -n 8
