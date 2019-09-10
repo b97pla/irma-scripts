@@ -23,3 +23,4 @@ for samples present in a supplied vcf file
 as json
 * __run_FastQC_and_MultiQC.sh__ - bash script to run FastQC on a specified project in a runfolder. 
 The script will summarize the output in one or several MultiQC-reports.
+* __run_multiqc_bp_qc.sh__ - A simple wrapper for the MultiQC command used when performing QC of best-practice WGS projects.
