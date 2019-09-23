@@ -38,6 +38,8 @@ STAGINGDIR="$GENOTYPEDIR/staging"
 SUPRCREDS="$GENOTYPEDIR/supr_creds.txt"
 PROJPATH="$GENOTYPEDIR/$PROJECT"
 LOGFILE=${0}.log
+OUTFILE=${0}.out
+ERRFILE=${0}.err
 TSTAMP=$(date +%s)
 MD5FILE="$GENOTYPEDIR/${PROJECT}.${TSTAMP}.md5"
 ORIGINAL_CWD="$(pwd)"
@@ -68,10 +70,10 @@ mv $MD5FILE $PROJPATH/
 
 # Log the delivery
 MSG="$TSTAMP  "$(date -d @$TSTAMP --utc +"%Y-%m-%dT%H:%M:%SZ")"  $(hostname)  ${USER}  ${PROJPATH}/$(basename $MD5FILE)  "$(echo $CMD |sed -re "s/$PASS/**************/")
-echo "$MSG" >> $LOGFILE
+echo "$MSG" |tee -a $LOGFILE $OUTFILE $ERRFILE
 
-# Execute the command
-$CMD
+# Execute the command, duplicating stdout and stderr to files
+$CMD 1> >(tee -a $OUTFILE) 2> >(tee -a $ERRFILE >&2)
 
 # change the cwd back
 cd "$ORIGINAL_CWD"
