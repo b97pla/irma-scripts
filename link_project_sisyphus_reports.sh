@@ -41,7 +41,7 @@ do
   fi
 
   # link each of the report files into the sisyphus report folder
-  for f in $(find "$PDIR" -mindepth 1 -maxdepth 1 -not -name "Sample_*")
+  for f in $(find "$PDIR" -mindepth 1 -maxdepth 1 -not -name "Sample_*" -not -name "checksums.md5")
   do
     CMD="ln -s -t \"$TDIR\" \"$f\""
     if [[ "$NO_DRYRUN" -ne "RUN" ]]
