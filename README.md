@@ -13,6 +13,8 @@ When adding a new script to this repository, be sure to add a brief description 
 
 * __concordance_check.sh__ - bash script to perform concordance check between a vcf file with genotypes and a vcf file 
 with variant calls
+* __deliver_project_to_user.sh__ - bash wrapper script around the deliver.py script, which should facilitate the 
+delivery for the SNP platform
 * __find_unorganized_flowcells.sh__ - bash script that verifies that the organized project folder under the DATA 
 directory contains all runfolders in incoming having data from the project in them
 * __link_project_sisyphus_reports.sh__ - bash script that links sisyphus runfolder reports from the incoming folder to
