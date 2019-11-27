@@ -49,7 +49,7 @@ then
   SEARCH_PATTERN='*fastq.gz'
 else
   echo "Will NOT include index FASTQs in report"
-  SEARCH_PATTERN='*_R[1-2]_*fastq.gz'
+  SEARCH_PATTERN='*_R[1-9]_001.fastq.gz'
 fi
 
 PROJECT=`basename $PROJECT_PATH`
