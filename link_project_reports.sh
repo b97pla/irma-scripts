@@ -1,7 +1,7 @@
 #! /bin/bash -l
 
 ## 
-# This script links Sisyphus reports from the runfolder to the correct ANALYSIS/PROJECT 
+# This script links reports from the runfolder to the correct ANALYSIS/PROJECT 
 # folder. The project id is passed as an argument to this script. The script depends on the project_runfolder.sh script
 ##
 
@@ -24,14 +24,14 @@ do
   RF=$(readlink -f "$RFPATH/$d")
   PDIR="$RF/Projects/$PROJECT/$d"
 
-  # skip if the folder containing Sisyphus reports does not exist 
+  # skip if the folder containing reports does not exist 
   if [[ ! -e "$PDIR" ]]
   then
     continue
   fi
   
-  # create the folder to hold the links to the sisyphus reports, if it does not exist
-  TDIR="$APATH/$PROJECT/qc_sisyphus/reports/$d"
+  # create the folder to hold the links to the reports, if it does not exist
+  TDIR="$APATH/$PROJECT/seqreports/reports/$d"
   CMD="mkdir -p \"$TDIR\""
   if [[ "$NO_DRYRUN" -ne "RUN" ]]
   then
@@ -40,8 +40,8 @@ do
     eval "$CMD"
   fi
 
-  # link each of the report files into the sisyphus report folder
-  for f in $(find "$PDIR" -mindepth 1 -maxdepth 1 -not -name "Sample_*" -not -name "checksums.md5")
+  # link each of the report files into the report folder
+  for f in $(find "$PDIR" -mindepth 1 -maxdepth 1 -not -name "Sample_*" -not -name "*fastq.gz" -not -name "checksums.md5" -not -name "SampleSheet.csv" -not -name "Undetermined")
   do
     CMD="ln -s -t \"$TDIR\" \"$f\""
     if [[ "$NO_DRYRUN" -ne "RUN" ]]
