@@ -1,0 +1,12 @@
+
+id: 'sample_list'
+section_name: 'List of samples'
+plot_type: 'html'
+description: 'included in the analysis'
+data: |
+    <ul>
+    {% for sample_name in sample_names %}
+        <li>{{sample_name}}</li>
+    {% endfor %}
+    </ul>
+

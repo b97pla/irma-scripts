@@ -13,5 +13,10 @@
 #SBATCH -o run_multiqc_bp_qc.%j.out
 PROJECT_PATH=$1
 
-multiqc --template default --config /proj/ngi2016001/private/conf/multiqc_config.yaml --title "$(basename $PROJECT_PATH)" --filename "$(basename $PROJECT_PATH)_$(date +%y%m%d)" --outdir multiqc_ngi --data-format json --zip-data-dir --no-push "$PROJECT_PATH"
+python /proj/ngi2016001/private/scripts/sample_list_for_multiqc.py --path $PROJECT_PATH
 
+if [[ $? == "0" ]]; then
+    multiqc --template default --config /proj/ngi2016001/private/conf/multiqc_config.yaml --title "$(basename $PROJECT_PATH)" --filename "$(basename $PROJECT_PATH)_$(date +%y%m%d)" --outdir multiqc_ngi --data-format json --zip-data-dir --no-push "$PROJECT_PATH"
+else
+    echo "Something went wrong when making the sample list"
+fi
