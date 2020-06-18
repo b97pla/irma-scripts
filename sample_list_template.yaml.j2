@@ -5,7 +5,7 @@ plot_type: 'html'
 description: 'included in the analysis'
 data: |
     <ul>
-    {% for sample_name in sample_names %}
+    {% for sample_name in sample_names | sort -%}
         <li>{{sample_name}}</li>
     {% endfor %}
     </ul>

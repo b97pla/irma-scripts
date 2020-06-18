@@ -1,0 +1,17 @@
+extra_fn_clean_exts:
+    - type: remove
+      pattern: HaplotypeCaller_
+    - type: remove
+      pattern: .recal
+    - type: remove
+      pattern: _snpEff
+
+fn_ignore_files:
+    - '*.g_snpEff.*'
+    - '*.g.bcf.tools.stats.out'
+
+fn_ignore_dirs:
+    - 'work'
+
+table_columns_visible:
+    FastQC: False
