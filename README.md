@@ -26,3 +26,5 @@ as json
 * __run_FastQC_and_MultiQC.sh__ - bash script to run FastQC on a specified project in a runfolder. 
 The script will summarize the output in one or several MultiQC-reports.
 * __run_multiqc_bp_qc.sh__ - A simple wrapper for the MultiQC command used when performing QC of best-practice WGS projects.
+* __project_runfolders.sh__ - Mainly used to find all runfolders with samplesheets containing a specific project or sample name.
+Scans incoming for csv-files at most two folders down and greps for the given string, then echoes folder if found.
