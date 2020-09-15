@@ -31,7 +31,7 @@ do
   fi
   
   # create the folder to hold the links to the reports, if it does not exist
-  TDIR="$APATH/$PROJECT/seqreports/reports/$d"
+  TDIR="$APATH/$PROJECT/seqreports/$d"
   CMD="mkdir -p \"$TDIR\""
   if [[ "$NO_DRYRUN" -ne "RUN" ]]
   then
