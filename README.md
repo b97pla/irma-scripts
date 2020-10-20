@@ -1,7 +1,8 @@
 # irma-scripts
 Stand-alone scripts deployed to Irma
 
-These scripts are deployed to `/proj/ngi2016001/private/scripts` by the irma-provision process.
+These scripts are deployed to `/lupus/ngi/production/latest/sw/upps_standalone_scripts/` by the irma-provision process.
+The script directory is added to PATH when loading the Irma environment, meaning that these scripts are available on the command-line. 
 
 The scripts should contain instructions for usage unless it's obvious how to use them. Preferably, invoking a script 
 without arguments should be safe to run without any side effects and only display usage instructions on stdout
