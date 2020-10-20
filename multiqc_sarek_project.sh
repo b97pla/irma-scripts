@@ -5,8 +5,8 @@
 # Before the reports are generated, a MultiQC custom content config is generated to add a sample list section to the reports. 
 #
 # Usage:
-#  - Locally: bash /proj/ngi2016001/private/scripts/multiqc_sarek_project.sh /proj/ngi2016001/nobackup/NGI/ANALYSIS/<project>
-#  - Submitted to compute node (RECOMMENDED): sbatch /proj/ngi2016001/private/scripts/multiqc_sarek_project.sh /proj/ngi2016001/nobackup/NGI/ANALYSIS/<project>
+#  - Locally: bash multiqc_sarek_project.sh /proj/ngi2016001/nobackup/NGI/ANALYSIS/<project>
+#  - Submitted to compute node (RECOMMENDED): sbatch multiqc_sarek_project.sh /proj/ngi2016001/nobackup/NGI/ANALYSIS/<project>
 #
 #SBATCH -A ngi2016001
 #SBATCH -n 8
@@ -17,7 +17,7 @@ PROJECT_PATH=$1
 PROJECT_ID=$(basename $PROJECT_PATH)
 REPORT_FILENAME=$PROJECT_ID"_multiqc_report"
 REPORT_FILENAME_QC=$PROJECT_ID"_multiqc_report_qc"
-SCRIPTS_DIR="/proj/ngi2016001/private/scripts"
+SCRIPTS_DIR="$(readlink -f "$(dirname $0)")"
 CONFIG_DIR=$SCRIPTS_DIR"/config"
 
 check_errors()
