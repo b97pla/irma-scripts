@@ -26,7 +26,9 @@ def convert_size(size_bytes):
     s = round(size_bytes / p, 2)
     return "%s %s" % (s, size_name[i])
 
-cleanup_directory_names = ["work", "results", "SarekGermlineAnalysis"]
+# The last four elements are needed to support cleanup of sarek 2.3 data generated via the  ngi_pipeline,
+# when we no longer has to support that, we can remove those folders from the list. / MÅ 20201104
+cleanup_directory_names = ["work", "results", "Annotation", "Preprocessing", "VariantCalling", "Reports"]
 
 directory_list = []
 
