@@ -2,11 +2,14 @@
 
 # Script for making project level MultiQC reports for sarek
 # Two reports are made: One for a bioinformatician to inspect QC and one to send to the user.
-# Before the reports are generated, a MultiQC custom content config is generated to add a sample list section to the reports. 
+# Before the reports are generated, a MultiQC custom content config is generated to add a sample list section to the reports.
 #
 # Usage:
 #  - Locally: bash multiqc_sarek_project.sh /proj/ngi2016001/nobackup/NGI/ANALYSIS/<project>
 #  - Submitted to compute node (RECOMMENDED): sbatch multiqc_sarek_project.sh /proj/ngi2016001/nobackup/NGI/ANALYSIS/<project>
+#
+# A custom script location can be supplied as a second argument (useful during testing):
+#   - bash multiqc_sarek_project.sh /proj/ngi2016001/nobackup/NGI/ANALYSIS/<project> /path/to/scripts_dir
 #
 #SBATCH -A ngi2016001
 #SBATCH -n 8
@@ -17,7 +20,13 @@ PROJECT_PATH=$1
 PROJECT_ID=$(basename $PROJECT_PATH)
 REPORT_FILENAME=$PROJECT_ID"_multiqc_report"
 REPORT_FILENAME_QC=$PROJECT_ID"_multiqc_report_qc"
-SCRIPTS_DIR="$(readlink -f "$(dirname $0)")"
+
+if [ -z "$2" ]
+  then
+    SCRIPTS_DIR="/lupus/ngi/production/latest/sw/upps_standalone_scripts"
+  else
+    SCRIPTS_DIR=$2
+fi
 CONFIG_DIR=$SCRIPTS_DIR"/config"
 
 check_errors()
@@ -29,6 +38,8 @@ check_errors()
     exit ${1}
   fi
 }
+
+source activate NGI_py3
 
 python $SCRIPTS_DIR"/sample_list_for_multiqc.py" --path $PROJECT_PATH
 check_errors $? "Something went wrong when making the sample list"
