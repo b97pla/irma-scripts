@@ -16,5 +16,5 @@ export NXF_WORK=/proj/ngi2016001/nobackup/NGI/ANALYSIS/PROJECT/work
 
 rnaseq -resume --genome GENOME \
     --reads '/proj/ngi2016001/nobackup/NGI/DATA/merged_fastqs_PROJECT/*_R{1,2}.fastq.gz' \
-	--outdir /proj/ngi2016001/nobackup/NGI/ANALYSIS/PROJECT/results --reverse-stranded
+    --outdir /proj/ngi2016001/nobackup/NGI/ANALYSIS/PROJECT/results --reverse-stranded
 
