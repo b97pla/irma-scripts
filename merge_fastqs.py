@@ -1,85 +1,43 @@
-# Modified version of https://github.com/SciLifeLab/standalone_scripts/blob/master/merge_and_rename_NGI_fastq_files.py
-# to fit the NGI Uppsala standard
-
+import argparse
 import re
 import os
-import sys
 import shutil
-import argparse
-import collections
 
-def merge_files(input_dir, dest_dir):
+arg_parser = argparse.ArgumentParser(description=""" Merges all fastq-files that match the standard name pattern per sample and read. Looks through the given dir and subdirs.""")
+arg_parser.add_argument("--input_dir", metavar='Input directory', required=True, help="Base directory for the fastq files that should be merged. ")
+arg_parser.add_argument("--output_dir", metavar='Output directory', required=True, help="Path for output of merged files.")
+args = arg_parser.parse_args()
 
-    #Gather all fastq files in inputdir and its subdirs
-    fastq_files=[]
-    for subdir, dirs, files in os.walk(input_dir):
-        for fastq in  files:
-            if fastq.endswith('.fastq.gz'):
-                fastq_files.append(os.path.join(subdir, fastq))
+sample_pattern = re.compile(r"^(.+)_S[0-9]+_L00[1-8]_(R[1-2])_.+\.fastq\.gz$")
 
-    #Match NGI sample number from flowcell
-    sample_pattern=re.compile("^(.+)_S[0-9]+_L00[1-8]_R([1-2])_")
-    #Remove files that already have the right name (i.e have been merged already)
-    matches=[]
-    for fastq_file in fastq_files:
-        try:
-            match=sample_pattern.search(os.path.basename(fastq_file)).group(1)
+def find_fastqs(base_dir, pattern):
+    fastq_dict = {}
+    for root, dirs, files in os.walk(base_dir):
+        for filename in files:
+            match = pattern.match(filename)
             if match:
-                matches.append(fastq_file)
-        except AttributeError:
-            continue
-    fastq_files=matches
+                sample_name       = match.group(1)
+                sequencing_read   = match.group(2)
 
-    while fastq_files:
-        tomerge=[]
+                if not sample_name in fastq_dict:
+                    fastq_dict[sample_name] = {}
+                if not sequencing_read in fastq_dict[sample_name]:
+                    fastq_dict[sample_name][sequencing_read] = []
+                fastq_dict[sample_name][sequencing_read].append(os.path.join(root, filename))
+    return fastq_dict
 
-        #grab one sample to work on
-        first=fastq_files[0]
-        fq_bn=os.path.basename(first)
-        sample_name=''.join((sample_pattern.match(fq_bn).group(1),'_'))
-        fastq_files_read1=[]
-        fastq_files_read2=[]
+def merge_fastqs(file_list, output_filename):
+    print("Merging:")
+    with open(output_filename, 'wb') as output_file:
+        for fastq_file_name in file_list:
+            print(fastq_file_name)
+            with open(fastq_file_name, 'rb') as fastq_file:
+                shutil.copyfileobj(fastq_file, output_file)
+    print("as {}".format(output_filename))
+    print()
 
-        for fq in fastq_files:
-            if sample_name in os.path.basename(fq) and "_R1_" in os.path.basename(fq):
-                fastq_files_read1.append(fq)
+fastqs = find_fastqs(args.input_dir, sample_pattern)
 
-            if sample_name in os.path.basename(fq) and "_R2_" in os.path.basename(fq):
-                fastq_files_read2.append(fq)
-
-        fastq_files_read1.sort()
-        fastq_files_read2.sort()
-
-        actual_merging(sample_name,1, fastq_files_read1, dest_dir)
-        actual_merging(sample_name,2, fastq_files_read2, dest_dir)
-
-        for fq in fastq_files_read1:
-            fastq_files.remove(fq)
-        for fq in fastq_files_read2:
-            fastq_files.remove(fq)
-
-
-def actual_merging(sample_name, read_nb, tomerge, dest_dir):
-    outfile=os.path.join(dest_dir, "{}R{}.fastq.gz".format(sample_name, read_nb))
-    print "Merging the following files:"
-    if not tomerge:
-        print "No read {} files found".format(read_nb)
-        return
-    for fq in tomerge:
-        print fq
-    print "as {}".format(outfile)
-    with open(outfile, 'wb') as wfp:
-        for fn in tomerge:
-            with open(fn, 'rb') as rfp:
-                shutil.copyfileobj(rfp, wfp)
-
-
-if __name__ == "__main__":
-   parser = argparse.ArgumentParser(description=""" Merges all fastq-files from each samples into one file. Looks through the given dir and subdirs.
-   Written with the NGI folder structure in mind.""")
-   parser.add_argument("input_dir", metavar='Input directory', nargs='?', default='.',
-                                   help="Base directory for the fastq files that should be merged. ")
-   parser.add_argument("dest_dir", metavar='Output directory', nargs='?', default='.',
-                                   help="Path path to where the merged files should be outputed. ")
-   args = parser.parse_args()
-   merge_files(args.input_dir, args.dest_dir)
+for sample in sorted(fastqs.keys()):
+    for read in sorted(fastqs[sample].keys()):
+        merge_fastqs(fastqs[sample][read], os.path.join(args.output_dir, "{}_{}.fastq.gz".format(sample, read)))

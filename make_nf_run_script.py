@@ -15,10 +15,6 @@ analysis_path = "/proj/ngi2016001/nobackup/NGI/ANALYSIS/"
 scripts_path = os.path.join(analysis_path, project, "scripts")
 template_path = "/lupus/ngi/production/latest/sw/upps_standalone_scripts/run_script_templates"
 
-#Keep old template path for now in case not rolled out yet from github
-if not (os.path.isdir(template_path)):
-  template_path = "/proj/ngi2016001/private/templates"
-
 # Create scripts folder (if not already created)
 os.system("mkdir -p {}".format(scripts_path))
 
