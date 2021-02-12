@@ -1,3 +1,4 @@
+from __future__ import print_function
 import argparse
 import re
 import os
@@ -8,7 +9,7 @@ arg_parser.add_argument("--input_dir", metavar='Input directory', required=True,
 arg_parser.add_argument("--output_dir", metavar='Output directory', required=True, help="Path for output of merged files.")
 args = arg_parser.parse_args()
 
-sample_pattern = re.compile(r"^(.+)_S[0-9]+_L00[1-8]_(R[1-2])_.+\.fastq\.gz$")
+sample_pattern = re.compile(r"^(.+)_S[0-9]+_L[0-9]{3}_(R[0-9]+)_.+\.fastq\.gz$")
 
 def find_fastqs(base_dir, pattern):
     fastq_dict = {}
@@ -40,4 +41,4 @@ fastqs = find_fastqs(args.input_dir, sample_pattern)
 
 for sample in sorted(fastqs.keys()):
     for read in sorted(fastqs[sample].keys()):
-        merge_fastqs(fastqs[sample][read], os.path.join(args.output_dir, "{}_{}.fastq.gz".format(sample, read)))
+        merge_fastqs(sorted(fastqs[sample][read]), os.path.join(args.output_dir, "{}_{}.fastq.gz".format(sample, read)))
