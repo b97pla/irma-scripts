@@ -35,7 +35,7 @@ if pipeline == 'rnaseq' and genome == 'GRCh38':
 os.system(f"cp {template_path}/{pipeline}_template {scripts_path}/run_analysis.sh")
 
 # Add project and genome to template
-sed_cmd = "gsed -i"
+sed_cmd = "sed -i"
 for srch, rplc in [
   ("_PROJECT_", project),
   ("_GENOME_", genome),
